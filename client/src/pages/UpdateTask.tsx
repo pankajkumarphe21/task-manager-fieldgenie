@@ -1,5 +1,5 @@
 import { Button, Card, FormControl, Input, InputLabel } from "@mui/material";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "../config/axios";
 
@@ -17,7 +17,8 @@ const UpdateTask = () => {
       setCompleted(temp.completed);
     });
   }, []);
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     axios
       .put(`/task/update/${params.id}`, { title, desc, completed })
       .then(() => {})
