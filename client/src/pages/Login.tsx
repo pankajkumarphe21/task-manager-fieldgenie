@@ -5,35 +5,27 @@ import {
   FormControl,
   Input,
   InputLabel,
+  Typography,
 } from "@mui/material";
 import { FormEvent, useState } from "react";
-import axios from "axios";
+import axios from '../config/axios';
 import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
-import { updateUser } from "../features/user/User";
-import { auth, provider, signInWithPopup } from "../config/firebase";
 
 const Login = () => {
   const navigate=useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch=useDispatch();
+  const [err,setErr]=useState(null);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios.get('/');
-    dispatch(updateUser(email));
-    navigate('/');
-  };
-  const signInWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const idToken = await result.user.getIdToken();
-      axios.post('http://localhost:8800/auth/login',{idToken}).then((res)=>{
-        console.log(res.data);
-      })
-    } catch (error) {
-      console.error("Google Sign-In Error:", error);
-    }
+    axios.post('/auth/login',{
+      email,password
+    }).then((res)=>{
+      localStorage.setItem('userId', res.data.existingUser._id);
+      navigate('/');
+    }).catch((err)=>{
+      setErr(err.response.data.message);
+    });
   };
   return (
     <form onSubmit={handleSubmit} style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}>
@@ -60,11 +52,10 @@ const Login = () => {
             required
           />
         </FormControl>
+        <Typography sx={{height:'50px',color:'red'}}>{err}</Typography>
         <Button type="submit" sx={{marginBottom: "20px"}} variant="contained">Login</Button>
         <Divider sx={{marginBottom: "20px"}}>OR</Divider>
         <Button onClick={()=>navigate('/register')} variant="contained" color="secondary" sx={{marginBottom: "20px"}}>Register</Button>
-        <Divider sx={{marginBottom: "20px"}}>OR</Divider>
-        <Button onClick={()=>signInWithGoogle()} variant="contained" sx={{backgroundColor:'orange'}}>Sign in with Google</Button>
       </Card>
     </form>
   );

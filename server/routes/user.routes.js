@@ -1,9 +1,10 @@
 import express from "express";
-import { loginUser, registerUser } from "../controllers/user.controller";
+import { getTasks, loginUser, registerUser } from "../controllers/user.controller.js";
 
 const router=express.Router();
 
-router.get('/login',loginUser);
-router.get('/register',registerUser);
+router.post('/login',loginUser);
+router.post('/register',registerUser);
+router.get('/:userId',getTasks);
 
 export default router;

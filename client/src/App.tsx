@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Register from "./pages/Register";
+import UpdateTask from "./pages/UpdateTask";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/update/:id" element={<UpdateTask />} />
         </Routes>
       </BrowserRouter>
     </main>

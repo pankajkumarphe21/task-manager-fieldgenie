@@ -11,8 +11,12 @@ const userSchema=new mongoose.Schema({
     },
     password:{
         type:String,
-        select:false
-    }
+    },
+    tasks:[
+        {
+            type:mongoose.Schema.Types.ObjectId,ref:'task'
+        }
+    ]
 })
 
 const User=mongoose.model('user',userSchema)
